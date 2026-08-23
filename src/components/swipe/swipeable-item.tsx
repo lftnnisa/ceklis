@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useAnimation, type PanInfo } from "framer-motion";
+import { animate, motion, useMotionValue, type PanInfo } from "framer-motion";
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,15 +25,15 @@ export function SwipeableItem({
   leftLabel = "Skip",
   className,
 }: SwipeableItemProps) {
-  const controls = useAnimation();
+  const x = useMotionValue(0);
   const [dragX, setDragX] = useState(0);
   const [committed, setCommitted] = useState<"right" | "left" | null>(null);
 
-  function handleDrag(_: unknown, info: PanInfo) {
-    setDragX(info.offset.x);
+  function handleDrag() {
+    setDragX(x.get());
   }
 
-  async function handleDragEnd(_: unknown, info: PanInfo) {
+  function handleDragEnd(_: unknown, info: PanInfo) {
     const passedRight =
       info.offset.x > SWIPE_THRESHOLD || info.velocity.x > VELOCITY_THRESHOLD;
     const passedLeft =
@@ -41,23 +41,13 @@ export function SwipeableItem({
 
     if (passedRight) {
       setCommitted("right");
-      await controls.start({
-        x: 400,
-        opacity: 0,
-        transition: { duration: 0.2 },
-      });
-      onSwipeRight();
+      animate(x, 400, { duration: 0.2 }).then(() => onSwipeRight());
     } else if (passedLeft) {
       setCommitted("left");
-      await controls.start({
-        x: -400,
-        opacity: 0,
-        transition: { duration: 0.2 },
-      });
-      onSwipeLeft();
+      animate(x, -400, { duration: 0.2 }).then(() => onSwipeLeft());
     } else {
       setDragX(0);
-      controls.start({ x: 0, transition: { type: "spring", stiffness: 500, damping: 35 } });
+      animate(x, 0, { type: "spring", stiffness: 500, damping: 35 });
     }
   }
 
@@ -90,7 +80,7 @@ export function SwipeableItem({
         dragElastic={0.7}
         onDrag={handleDrag}
         onDragEnd={handleDragEnd}
-        animate={controls}
+        style={{ x }}
         className="relative touch-pan-y bg-background"
       >
         {children}

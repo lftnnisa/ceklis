@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ClerkProvider appearance={{ theme: shadcn }}>
           <TooltipProvider>
             {children}
-            <Toaster />
+            <Toaster position="top-center" />
           </TooltipProvider>
         </ClerkProvider>
       </body>
