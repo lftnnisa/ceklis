@@ -129,3 +129,16 @@
     @apply font-sans;
   }
 }
+
+.journal-content h2 {
+  @apply mt-2 mb-1 text-lg font-semibold;
+}
+.journal-content p {
+  @apply mb-2 leading-relaxed;
+}
+.journal-content ul {
+  @apply mb-2 list-disc pl-5;
+}
+.journal-content li {
+  @apply mb-0.5;
+}
