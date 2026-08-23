@@ -11,7 +11,7 @@ export function BottomNav() {
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80 md:hidden">
       <ul className="grid grid-cols-5">
-        {navItems.map((item) => {
+        {navItems.filter((item) => item.mobile).map((item) => {
           const active = pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
